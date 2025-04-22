@@ -1,0 +1,19 @@
+# Node.js (Backend y Frontend)
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Dependencias específicas del frontend (si usas React, por ejemplo)
+frontend/build/
+
+# Dependencias específicas del backend (si usas Node.js, Express, etc.)
+backend/node_modules/
+
+# Archivos de configuración de IDEs (ejemplo: VS Code)
+.vscode/
+
+# Archivos de entorno
+.env
+
+# Otros archivos o carpetas específicas que no desees versionar

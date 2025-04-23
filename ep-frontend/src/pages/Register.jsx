@@ -3,17 +3,26 @@ import { useNavigate } from "react-router-dom";
 import API from "../api/api";
 import { Input } from "../components/Input";
 import { Button } from "../components/Button";
+import useValidations from "../hooks/useValidations";
+import { FormErrors } from "../components/FormErrors";
 
-export default function Register() {
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
+export const Register = () => {
+  const [form, setForm] = useState({ name: "", email: "", password: "", confirmPassword: "" });
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { errors, validateRegister } = useValidations();
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    const isValid = validateRegister(form);
+    if (!isValid) {
+      return;
+    }
+
     try {
       await API.post("/users/register", form);
       navigate("/");
@@ -32,10 +41,8 @@ export default function Register() {
           <span className="text-green-500">Crear</span> cuenta
         </h2>
 
-        {error && (
-          <p className="bg-[#FDEAEA] text-[#EB5757] px-4 py-2 rounded mb-4 text-sm">
-            {error}
-          </p>
+        {(error || Object.keys(errors).length > 0) && (
+            <FormErrors errors={{ error, ...errors }} />
         )}
 
         <Input
@@ -44,16 +51,16 @@ export default function Register() {
           placeholder="Nombre"
           value={form.name}
           onChange={handleChange}
-          className="w-full mb-4 p-3 border border-[#BDBDBD] rounded-lg focus:outline-none focus:border-[#2F80ED]"
+          error={errors?.name}
         />
 
         <Input
           name="email"
-          type="email"
+          type="text"
           placeholder="Correo electrónico"
           value={form.email}
           onChange={handleChange}
-          className="w-full mb-4 p-3 border border-[#BDBDBD] rounded-lg focus:outline-none focus:border-[#2F80ED]"
+          error={errors?.email}
         />
 
         <Input
@@ -62,8 +69,19 @@ export default function Register() {
           placeholder="Contraseña"
           value={form.password}
           onChange={handleChange}
-          className="w-full mb-6 p-3 border border-[#BDBDBD] rounded-lg focus:outline-none focus:border-[#2F80ED]"
+          showText={true}
+          error={errors?.password}
         />
+
+        <Input
+          name="confirmPassword"
+          type="password"
+          placeholder="Repetir contraseña"
+          value={form.confirmPassword}
+          onChange={handleChange}
+          showText={true}
+          error={errors?.confirmPassword}
+        />  
 
         <Button
           type="submit"
@@ -73,9 +91,11 @@ export default function Register() {
 
         <p className="text-sm mt-4 text-center">
           ¿Ya tienes cuenta?{" "}
-          <a href="/" className="text-[#2F80ED] hover:underline">
-            Inicia sesión
-          </a>
+          <Button 
+            onClick={() => navigate("/")}
+            className="text-[#2F80ED] hover:underline"
+            text="Inicia sesión"
+          />
         </p>
       </form>
     </div>

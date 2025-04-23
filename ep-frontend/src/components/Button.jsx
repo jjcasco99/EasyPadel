@@ -1,5 +1,3 @@
-
-
 export const Button = ({ onClick, text, className,type}) => {
     return (
         <button

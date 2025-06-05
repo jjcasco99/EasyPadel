@@ -1,22 +1,21 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import API from "../api/api";
-import { getToken } from "../auth";
 import { Button } from "../components/Button";
 import { Input } from "../components/Input";
 import useValidations from "../hooks/useValidations";
 import { FormErrors } from "../components/FormErrors";
+import { useModal } from "../hooks/useModal"
+import { Register } from "../pages/Register";
+import { useUser } from "../hooks/useUser";
+import { motion } from "framer-motion";
 
-export const Login = () => {
+export const Login = ({ booking }) => {
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
-  const navigate = useNavigate();
   const { errors, validateLogin } = useValidations();
+  const { open: openRegister, close } = useModal();
+  const { login } = useUser();
   
-  useEffect(() => {
-    const token = getToken();
-    if (token) navigate("/home");
-  }, [navigate]);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -33,17 +32,24 @@ export const Login = () => {
       const res = await API.post("/users/login", form);
       localStorage.setItem("token", res?.data?.token);
       localStorage.setItem("user", JSON.stringify(res?.data?.user));
-      navigate("/home");
+      login(res?.data?.user);
+      close();
     } catch (err) {
       setError("Credenciales incorrectas");
     }
   };
 
 return (
-    <div className="min-h-screen bg-[#F9F9F9] flex items-center justify-center">
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 40 }}
+      transition={{ duration: 0.3 }}
+      className="flex flex-col items-center justify-center bg-white p-8 rounded-2xl "
+    >
         <form
             onSubmit={handleSubmit}
-            className="bg-white p-8 rounded-2xl shadow-md w-full max-w-md"
+            className="w-full max-w-md"
         >
             <h2 className="text-2xl font-bold text-[#2F80ED] mb-6 text-center">
                 <span className="text-green-400">Easy</span>Padel
@@ -52,6 +58,10 @@ return (
             {(error || Object.keys(errors).length > 0) && (
                 <FormErrors errors={{ error, ...errors }} />
             )}
+
+            <h3 className="font-semibold text-gray-800 mb-4 text-center">
+                {booking && "Debes iniciar sesión o registrarte para reservar pistas"}
+            </h3>
 
             <Input
                 name="email"
@@ -76,18 +86,23 @@ return (
             <Button
                 type="submit"
                 className="w-full bg-green-500 text-white py-3 rounded-lg hover:bg-blue-600 transition"
-                text="Iniciar sesión"
-            />
+            >
+                Iniciar sesión
+            </Button>
 
+        </form>
             <p className="text-sm mt-4 text-center">
                 ¿No tienes cuenta?{" "}
                 <Button 
-                    onClick={() => navigate("/register")}
                     className="text-[#2F80ED] hover:underline"
-                    text="Regístrate"
-                />
+                    onClick={() => {
+                        close()
+                        openRegister(<Register />)
+                    } }
+                >
+                    Regístrate
+                </Button>
             </p>
-        </form>
-    </div>
+    </motion.div>
 );
 }

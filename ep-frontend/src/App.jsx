@@ -1,27 +1,34 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Home } from "./pages/Home";
-import { Login } from "./pages/Login";
-import { Register } from "./pages/Register";
-import PrivateRoute from "./components/PrivateRoute";
+import { MainContent } from "./pages/Home";
+import { ClubDetail } from "./pages/ClubDetail";
+import { Footer } from "./components/Footer/Footer";
+import { NavBar } from "./components/NavBar";
+import { MyBookings } from "./pages/MyBookings";
+import { ClubsManagement } from "./pages/ClubsManagement";
 
 function App() {
   return (
     <BrowserRouter>
+      <NavBar />
       <Routes>
-        {/* Login como página principal */}
-        <Route path="/" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-
-        {/* Rutas protegidas */}
           <Route
-            path="/home"
-            element={
-              <PrivateRoute>
-                <Home />
-              </PrivateRoute>
-            }
+            path="/"
+            element={<MainContent />}
+          />
+          <Route
+            path="/club/:id"
+            element={<ClubDetail />}
+          />
+          <Route
+            path="/clubs-management"
+            element={<ClubsManagement />}
+          />
+          <Route
+            path="/bookings"
+            element={<MyBookings />}
           />
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 }

@@ -1,15 +1,17 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import API from "../api/api";
 import { Input } from "../components/Input";
 import { Button } from "../components/Button";
 import useValidations from "../hooks/useValidations";
 import { FormErrors } from "../components/FormErrors";
+import { useModal } from "../hooks/useModal";
+import { Login } from "./Login";
 
 export const Register = () => {
   const [form, setForm] = useState({ name: "", email: "", password: "", confirmPassword: "" });
   const [error, setError] = useState("");
-  const navigate = useNavigate();
+  const { open: openLogin, close } = useModal();
+
   const { errors, validateRegister } = useValidations();
 
   const handleChange = (e) =>
@@ -25,17 +27,18 @@ export const Register = () => {
 
     try {
       await API.post("/users/register", form);
-      navigate("/");
+      close();
+      openLogin(<Login />);
     } catch (err) {
       setError("Error al registrar. Verifica los datos.");
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#F9F9F9] flex items-center justify-center">
+    <div className="flex flex-col items-center justify-center bg-white rounded-2xl p-8">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-2xl shadow-md w-full max-w-md"
+        className="w-full max-w-md"
       >
         <h2 className="text-2xl font-bold text-[#2F80ED] mb-6 text-center">
           <span className="text-green-500">Crear</span> cuenta
@@ -86,18 +89,23 @@ export const Register = () => {
         <Button
           type="submit"
           className="w-full bg-green-500 text-white py-3 rounded-lg hover:bg-blue-600 transition"
-          text="Registrarse"
-        />
+        >
+          Crear cuenta
+        </Button>
 
+      </form>
         <p className="text-sm mt-4 text-center">
           ¿Ya tienes cuenta?{" "}
           <Button 
-            onClick={() => navigate("/")}
             className="text-[#2F80ED] hover:underline"
-            text="Inicia sesión"
-          />
+            onClick={() => {
+              close()
+              openLogin(<Login />)
+            }}
+          >
+            Iniciar sesión
+          </Button>
         </p>
-      </form>
     </div>
   );
 }

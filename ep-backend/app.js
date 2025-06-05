@@ -5,6 +5,7 @@ const pool = require('./db');
 const clubsRouter = require('./routes/clubs');
 const courtsRouter = require('./routes/courts');
 const usersRouter = require('./routes/users');
+const bookingsRoutes = require('./routes/bookings');
 const cors = require('cors');
 const PORT = process.env.PORT || 3000;
 
@@ -14,6 +15,7 @@ app.use(cors())
 app.use('/clubs', clubsRouter);
 app.use('/courts', courtsRouter);
 app.use('/users', usersRouter);
+app.use("/bookings", bookingsRoutes);
 
 app.get('/', async (req, res) => {
   try {

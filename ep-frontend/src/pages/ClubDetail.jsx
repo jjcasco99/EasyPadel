@@ -83,7 +83,6 @@ export const ClubDetail = () => {
         <img
           className="w-full h-64 rounded-xl bg-cover bg-center shadow-lg"
           style={{ backgroundImage: `url(${club.background})` }}
-          alt={`${club.name} background`}
         />
 
         <div className="mt-6">

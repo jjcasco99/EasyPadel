@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "../components/Button";
-import { removeAccents } from "../services/utils";
 import { useClubs } from "../hooks/useClubs";
-import API from "../api/api";
 import { useState } from "react";
 
 export const MainContent = () => {
@@ -37,8 +35,6 @@ export const MainContent = () => {
 }
 
 const MostWanted = ({ moreSearchesClubsByCity, cityName }) => {
-  const city = removeAccents(moreSearchesClubsByCity?.[0]?.city?.toLocaleLowerCase());
-
   return (
     <div className="bg-[#F9F9F9] px-24 py-12">
       <div className="flex items-center justify-center mb-8">
@@ -242,7 +238,6 @@ const FoundClubs = ({ filtered }) => (
           className="bg-white rounded-2xl shadow-md p-6 border border-[#E0E0E0]"
         >
           <h2 className="text-xl font-semibold text-[#2F80ED] mb-2">{club.name}</h2>
-          {/* Faltarian las imagenes reales */}
           <img src={club.background} alt={club.name} className="w-full h-32 object-cover rounded-lg mb-4" />
           <p className="text-[#828282] mb-4">{club.address}</p>
           <Link

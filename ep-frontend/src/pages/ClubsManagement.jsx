@@ -34,18 +34,23 @@ export const ClubsManagement = () => {
         )
         : clubs;
 
+    const navigateTo = (e) => {
+        const clubId = e.currentTarget.id;
+        window.location.href = `/club/${clubId}`;
+    }
+
     return (
         <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-50">
             <h1 className="text-3xl font-bold mb-6">Gestión de Clubs</h1>
             <div className="w-full max-w-4xl rounded-lg shadow-md p-6 bg-white">
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-xl font-semibold">Lista de Clubs</h2>
-                    <button
+                    <Button
                         onClick={() => open(<AddClubForm />)}
                         className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-xl shadow"
                     >
                         Añadir Club
-                    </button>
+                    </Button>
                 </div>
                 <SearchSection setFilteredClubs={setFilteredClubs} search={false} />
                 {filtered?.length > 0 ? (
@@ -53,15 +58,15 @@ export const ClubsManagement = () => {
                         {filtered.map((club) => (
                             <li key={club.id} className="p-4 border rounded-lg flex justify-between gap-12 items-center">
                                 <div>
-                                    <h3 className="text-lg font-semibold">{club.name}</h3>
+                                    <h3 className="text-lg font-semibold hover:text-[#2F80ED] cursor-pointer"  onClick={navigateTo} id={club.id}>{club.name}</h3>
                                     <p>{club.description}</p>
                                 </div>
-                                <button
+                                <Button
                                     onClick={() => handleDelete(club.id)}
                                     className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-xl"
                                 >
                                     Eliminar
-                                </button>
+                                </Button>
                             </li>
                         ))}
                     </ul>

@@ -14,6 +14,10 @@ export const MyBookings = () => {
         return <p className="text-red-500 text-center mt-10">{error || courtErr}</p>;
     }
 
+    if (!user) {
+       window.location.href = '/';
+    }
+
 
 
     const handleCancelBooking = (bookingId) => async () => {

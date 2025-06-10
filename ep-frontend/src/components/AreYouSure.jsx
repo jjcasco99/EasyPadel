@@ -65,7 +65,7 @@ export const AreYouSure = ({ courtName, courtId, time, dayLabel, userId }) => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 40 }}
       transition={{ duration: 0.3 }}
-      className="bg-white rounded-xl shadow-2xl p-8 mx-auto text-center"
+      className="bg-white rounded-xl p-8 mx-auto text-center"
     >
       {!confirmed ? (
         <>

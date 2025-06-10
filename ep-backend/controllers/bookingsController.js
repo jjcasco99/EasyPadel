@@ -8,33 +8,6 @@ const createBooking = async (req, res) => {
   }
 
   try {
-    // // Comprobamos si la pista ya está reservada en ese horario
-    // const courtOverlap = await pool.query(
-    //   `SELECT * FROM bookings
-    //    WHERE court_id = $1
-    //    AND status IN ('pending', 'confirmed')
-    //    AND NOT ($3 <= start_time OR $2 >= end_time)`,
-    //   [court_id, start_time, end_time]
-    // );
-
-    // if (courtOverlap.rows.length > 0) {
-    //   return res.status(409).json({ error: "La pista ya está reservada en ese horario" });
-    // }
-
-    // // Comprobamos si el usuario ya tiene una reserva en ese horario
-    // const userOverlap = await pool.query(
-    //   `SELECT * FROM bookings
-    //    WHERE user_id = $1
-    //    AND status IN ('pending', 'confirmed')
-    //    AND NOT ($3 <= start_time OR $2 >= end_time)`,
-    //   [user_id, start_time, end_time]
-    // );
-
-    // if (userOverlap.rows.length > 0) {
-    //   return res.status(409).json({ error: "Ya tienes una reserva en ese horario" });
-    // }
-
-    // Insertamos la nueva reserva
     const result = await pool.query(
       `INSERT INTO bookings (user_id, court_id, start_time, end_time, status, day)
        VALUES ($1, $2, $3, $4, $5, $6)
